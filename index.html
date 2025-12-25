@@ -3,82 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EverestEquity | The 2026 Summit</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EverestEquity | Freedom Engine 🏔️</title>
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; padding-bottom: 120px; }
-        .accent-green { color: #10b981; }
-        input { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 8px; width: 100%; color: white; margin-bottom: 12px; }
-        .btn-primary { background: #10b981; color: #0f172a; font-weight: bold; padding: 12px; border-radius: 8px; width: 100%; transition: 0.3s; cursor: pointer; }
-        .btn-primary:hover { background: #059669; }
-        .disclaimer-box { font-size: 10px; color: #64748b; line-height: 1.4; }
+        /* 1. RESET & BASE STYLES */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
+        
+        body {
+            /* Replace the URL below with your mountain imagery link */
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 2. GLASSMORPHISM CARD */
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        h1 { font-size: 1.8rem; margin-bottom: 30px; font-weight: 700; color: #fff; }
+
+        /* 3. INPUT GROUPS */
+        .input-group { text-align: left; margin-bottom: 25px; }
+        
+        label { display: block; margin-bottom: 10px; font-size: 0.9rem; opacity: 0.9; }
+        
+        input[type="number"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        /* Range Slider Styling */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            appearance: none;
+            margin: 15px 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #00A86B; /* Emerald Green */
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 168, 107, 0.5);
+        }
+
+        .val-display { float: right; font-weight: bold; color: #00A86B; }
+
+        /* 4. BUTTON & RESULTS */
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #00A86B;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 10px;
+        }
+
+        button:active { transform: scale(0.98); background: #008f5a; }
+
+        .result-area { margin-top: 35px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        .years-count { font-size: 3.5rem; font-weight: 800; color: #00A86B; margin: 10px 0; }
+        
+        .disclaimer { font-size: 0.75rem; opacity: 0.6; margin-top: 30px; line-height: 1.4; }
+
+        /* MOBILE FIXES */
+        @media (max-width: 480px) {
+            .calculator-card { padding: 25px; }
+            h1 { font-size: 1.5rem; }
+        }
     </style>
 </head>
-<body class="p-6 flex flex-col items-center">
-    <div class="max-w-md w-full bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700">
-        <h1 class="text-2xl font-bold mb-2 text-center">Freedom <span class="accent-green">Summit 2026</span></h1>
-        <p class="text-slate-400 text-center text-xs mb-6">Automated Wealth Forecasting Engine</p>
-        
-        <div class="space-y-4">
-            <div>
-                <label class="block text-xs uppercase tracking-widest text-slate-400 mb-1">Monthly Expenses ($)</label>
-                <input type="number" id="expenses" placeholder="e.g. 3000" oninput="calculate()">
-            </div>
-            <div>
-                <label class="block text-xs uppercase tracking-widest text-slate-400 mb-1">Current Savings ($)</label>
-                <input type="number" id="savings" placeholder="e.g. 10000" oninput="calculate()">
-            </div>
-            <div>
-                <label class="block text-xs uppercase tracking-widest text-slate-400 mb-1">Monthly Contribution ($)</label>
-                <input type="number" id="contribution" placeholder="e.g. 500" oninput="calculate()">
-            </div>
-        </div>
+<body>
 
-        <div class="mt-6 p-4 bg-slate-900 rounded-xl text-center border border-slate-700">
-            <p class="text-slate-400 uppercase text-[10px] tracking-widest">Time to Freedom</p>
-            <h2 id="years" class="text-4xl font-bold text-white my-1">--</h2>
-            <p class="text-slate-500 text-xs mt-1">Target Nest Egg: <span id="target" class="accent-green">$0</span></p>
-        </div>
-
-        <div class="mt-8 pt-6 border-t border-slate-700">
-            <h3 class="text-sm font-semibold text-center mb-2">🚀 Get the "Top 3 Stocks for 2026"</h3>
-            <p class="text-xs text-slate-400 text-center mb-4">The exact watchlist we're using to accelerate our freedom dates.</p>
-            
-            <form action="https://formspree.io/f/xkownwek" method="POST">
-                <input type="email" name="email" placeholder="Enter your email" required>
-                <button type="submit" class="btn-primary">Send 2026 Watchlist</button>
-            </form>
-        </div>
-
-        <div class="mt-8 disclaimer-box text-center">
-            <p><strong>Disclaimer:</strong> This tool is for educational purposes only. Investing involves risk, including the possible loss of principal. No investment is guaranteed. Past performance is not indicative of future results. Please consult with a licensed financial professional before making any investment decisions.</p>
-        </div>
+<div class="calculator-card">
+    <h1>Freedom Engine 🏔️</h1>
+    
+    <div class="input-group">
+        <label>Monthly Contribution ($)</label>
+        <input type="number" id="monthly" value="1000">
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full bg-slate-900 p-4 border-t border-slate-700 text-[9px] text-slate-500 text-center px-8">
-        NOT FINANCIAL ADVICE. THE FREEDOM PROJECT 2026 IS A TOOL FOR INFORMATIONAL PURPOSES. TRADING STOCKS HAS RISK. CONSULT A PROFESSIONAL BEFORE TRANSACTING.
+    <div class="input-group">
+        <label>Expected Return <span class="val-display" id="returnLabel">8%</span></label>
+        <input type="range" id="return" min="1" max="15" value="8" step="0.5" oninput="updateDisplay()">
     </div>
 
-    <script>
-        function calculate() {
-            const exp = parseFloat(document.getElementById('expenses').value) || 0;
-            const sav = parseFloat(document.getElementById('savings').value) || 0;
-            const con = parseFloat(document.getElementById('contribution').value) || 0;
-            const target = (exp * 12) * 25;
-            document.getElementById('target').innerText = '$' + target.toLocaleString();
+    <div class="input-group">
+        <label>Annual Inflation <span class="val-display" id="inflationLabel">3%</span></label>
+        <input type="range" id="inflation" min="0" max="10" value="3" step="0.1" oninput="updateDisplay()">
+    </div>
 
-            let current = sav;
-            let months = 0;
-            if(con > 0 || current > 0) {
-                while(current < target && months < 720) { 
-                    current += con;
-                    current *= (1 + 0.08/12);
-                    months++;
-                }
-                const years = (months / 12).toFixed(1);
-                document.getElementById('years').innerText = years + " Years";
-            }
+    <button onclick="calculate()">Find My Summit</button>
+
+    <div id="result" class="result-area">
+        <p>Your Estimated Summit</p>
+        <div class="years-count" id="yearsOut">--</div>
+        <p style="font-size: 0.85rem; opacity: 0.8;">Years until $1,000,000 Portfolio</p>
+    </div>
+
+    <div class="disclaimer">
+        EverestEquity Disclaimer: For educational purposes only. Not financial advice. path to the summit involves market risk.
+    </div>
+</div>
+
+<script>
+    function updateDisplay() {
+        document.getElementById('returnLabel').innerText = document.getElementById('return').value + "%";
+        document.getElementById('inflationLabel').innerText = document.getElementById('inflation').value + "%";
+    }
+
+    function calculate() {
+        const monthly = parseFloat(document.getElementById('monthly').value);
+        const rawReturn = parseFloat(document.getElementById('return').value);
+        const inflation = parseFloat(document.getElementById('inflation').value);
+        const target = 1000000;
+
+        // REAL RATE LOGIC: Return minus Inflation
+        const realRateAnnual = (rawReturn - inflation) / 100;
+        const monthlyRate = realRateAnnual / 12;
+
+        if (monthlyRate <= 0) {
+            document.getElementById('yearsOut').innerText = (target / (monthly * 12)).toFixed(1);
+            return;
         }
-    </script>
+
+        // Solve for n (number of months)
+        let months = Math.log(1 + (target * monthlyRate / monthly)) / Math.log(1 + monthlyRate);
+        let years = (months / 12).toFixed(1);
+
+        document.getElementById('yearsOut').innerText = years;
+        
+        // Add a subtle "glow" animation to the result on click
+        const resElement = document.getElementById('yearsOut');
+        resElement.style.textShadow = "0 0 20px #00A86B";
+        setTimeout(() => { resElement.style.textShadow = "none"; }, 500);
+    }
+
+    // Run once on load
+    calculate();
+</script>
+
 </body>
 </html>
