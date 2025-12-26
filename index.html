@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EverestEquity | Freedom Engine 🏔️</title>
+    <title>EverestEquity | Nest Egg Engine 🏔️</title>
     <style>
-        /* 1. RESET & BASE STYLES */
+        /* BASE STYLES */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
         
         body {
-            /* Replace the URL below with your mountain imagery link */
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
                         url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
@@ -22,14 +21,14 @@
             padding: 20px;
         }
 
-        /* 2. GLASSMORPHISM CARD */
+        /* GLASSMORPHISM CARD */
         .calculator-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
-            padding: 40px;
+            padding: 35px;
             width: 100%;
             max-width: 450px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
@@ -37,12 +36,10 @@
             text-align: center;
         }
 
-        h1 { font-size: 1.8rem; margin-bottom: 30px; font-weight: 700; color: #fff; }
+        h1 { font-size: 1.6rem; margin-bottom: 25px; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* 3. INPUT GROUPS */
-        .input-group { text-align: left; margin-bottom: 25px; }
-        
-        label { display: block; margin-bottom: 10px; font-size: 0.9rem; opacity: 0.9; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.85rem; opacity: 0.9; font-weight: 500; }
         
         input[type="number"] {
             width: 100%;
@@ -51,24 +48,23 @@
             padding: 12px;
             border-radius: 8px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             outline: none;
         }
 
-        /* Range Slider Styling */
         input[type="range"] {
             width: 100%;
             height: 6px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 5px;
             appearance: none;
-            margin: 15px 0;
+            margin: 12px 0;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             background: #00A86B; /* Emerald Green */
             border-radius: 50%;
             cursor: pointer;
@@ -77,7 +73,6 @@
 
         .val-display { float: right; font-weight: bold; color: #00A86B; }
 
-        /* 4. BUTTON & RESULTS */
         button {
             width: 100%;
             padding: 16px;
@@ -88,33 +83,47 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s;
             margin-top: 10px;
         }
 
-        button:active { transform: scale(0.98); background: #008f5a; }
+        button:active { transform: scale(0.98); }
 
-        .result-area { margin-top: 35px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .result-area { 
+            margin-top: 30px; 
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.1); 
+        }
         
-        .years-count { font-size: 3.5rem; font-weight: 800; color: #00A86B; margin: 10px 0; }
+        .nest-egg-value { 
+            font-size: 2.8rem; 
+            font-weight: 800; 
+            color: #00A86B; 
+            margin: 10px 0;
+            word-wrap: break-word;
+        }
         
-        .disclaimer { font-size: 0.75rem; opacity: 0.6; margin-top: 30px; line-height: 1.4; }
+        .disclaimer { font-size: 0.7rem; opacity: 0.5; margin-top: 25px; line-height: 1.4; }
 
-        /* MOBILE FIXES */
         @media (max-width: 480px) {
-            .calculator-card { padding: 25px; }
-            h1 { font-size: 1.5rem; }
+            .calculator-card { padding: 20px; }
+            .nest-egg-value { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="calculator-card">
-    <h1>Freedom Engine 🏔️</h1>
+    <h1>Nest Egg Engine 🏔️</h1>
     
     <div class="input-group">
+        <label>Current Age <span class="val-display" id="ageLabel">30</span></label>
+        <input type="range" id="age" min="18" max="60" value="30" oninput="updateDisplay()">
+    </div>
+
+    <div class="input-group">
         <label>Monthly Contribution ($)</label>
-        <input type="number" id="monthly" value="1000">
+        <input type="number" id="monthly" value="500" oninput="calculate()">
     </div>
 
     <div class="input-group">
@@ -127,53 +136,59 @@
         <input type="range" id="inflation" min="0" max="10" value="3" step="0.1" oninput="updateDisplay()">
     </div>
 
-    <button onclick="calculate()">Find My Summit</button>
+    <button onclick="calculate()">Calculate My Peak</button>
 
     <div id="result" class="result-area">
-        <p>Your Estimated Summit</p>
-        <div class="years-count" id="yearsOut">--</div>
-        <p style="font-size: 0.85rem; opacity: 0.8;">Years until $1,000,000 Portfolio</p>
+        <p>Estimated Nest Egg at Age 65</p>
+        <div class="nest-egg-value" id="eggOut">--</div>
+        <p style="font-size: 0.8rem; opacity: 0.7;">(Inflation Adjusted Dollars)</p>
     </div>
 
     <div class="disclaimer">
-        EverestEquity Disclaimer: For educational purposes only. Not financial advice. path to the summit involves market risk.
+        EverestEquity: For educational purposes only. Projections are not guaranteed. Market cycles involve risk.
     </div>
 </div>
 
 <script>
     function updateDisplay() {
+        document.getElementById('ageLabel').innerText = document.getElementById('age').value;
         document.getElementById('returnLabel').innerText = document.getElementById('return').value + "%";
         document.getElementById('inflationLabel').innerText = document.getElementById('inflation').value + "%";
+        calculate();
     }
 
     function calculate() {
-        const monthly = parseFloat(document.getElementById('monthly').value);
+        const age = parseInt(document.getElementById('age').value);
+        const monthly = parseFloat(document.getElementById('monthly').value) || 0;
         const rawReturn = parseFloat(document.getElementById('return').value);
         const inflation = parseFloat(document.getElementById('inflation').value);
-        const target = 1000000;
+        
+        const retirementAge = 65;
+        const yearsToGrow = retirementAge - age;
+        const months = yearsToGrow * 12;
 
-        // REAL RATE LOGIC: Return minus Inflation
+        // REAL RATE LOGIC
         const realRateAnnual = (rawReturn - inflation) / 100;
         const monthlyRate = realRateAnnual / 12;
 
-        if (monthlyRate <= 0) {
-            document.getElementById('yearsOut').innerText = (target / (monthly * 12)).toFixed(1);
-            return;
+        let total = 0;
+        if (monthlyRate > 0) {
+            // Future Value of an Annuity Formula
+            total = monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+        } else {
+            total = monthly * months;
         }
 
-        // Solve for n (number of months)
-        let months = Math.log(1 + (target * monthlyRate / monthly)) / Math.log(1 + monthlyRate);
-        let years = (months / 12).toFixed(1);
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        });
 
-        document.getElementById('yearsOut').innerText = years;
-        
-        // Add a subtle "glow" animation to the result on click
-        const resElement = document.getElementById('yearsOut');
-        resElement.style.textShadow = "0 0 20px #00A86B";
-        setTimeout(() => { resElement.style.textShadow = "none"; }, 500);
+        document.getElementById('eggOut').innerText = formatter.format(total);
     }
 
-    // Run once on load
+    // Initialize
     calculate();
 </script>
 
